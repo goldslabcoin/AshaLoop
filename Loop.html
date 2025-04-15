@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AshaLoop FlameGate</title>
+  <style>
+    body {
+      font-family: monospace;
+      background: #0d0d0d;
+      color: #ffd700;
+      padding: 2em;
+      text-align: center;
+    }
+    input, button {
+      padding: 0.6em;
+      margin: 0.5em;
+      border: none;
+      border-radius: 4px;
+    }
+    #flameBar {
+      height: 20px;
+      background: linear-gradient(90deg,#ff4500,#ffd700);
+      margin-top: 1em;
+      transition: width 0.5s;
+    }
+  </style>
+</head>
+<body>
+  <h1>𐬀𐬵𐬎𐬥𐬀𐬬𐬀𐬌𐬙𐬌 :: AshaLoop</h1>
+  <p>Enter the sacred triad to pass FlameGate:</p>
+  <input id="input" placeholder="Word (𐬀𐬵𐬎𐬥𐬀𐬬𐬀𐬌𐬙𐬌)" />
+  <input id="intent" placeholder="Thought (truth)" />
+  <input id="clarity" type="number" placeholder="Clarity (0–144)" />
+  <button onclick="runLoop()">Invoke</button>
+
+  <div id="result"></div>
+  <div id="flameBar" style="width: 0;"></div>
+
+  <script>
+    let flameCoins = 0;
+
+    function FlameGate(input, intent, clarity) {
+      const pass = input === "𐬀𐬵𐬎𐬥𐬀𐬬𐬀𐬌𐬙𐬌" && intent.toLowerCase() === "truth" && clarity > 80;
+      return pass
+        ? { flame: true, status: "Asha aligned", flameCoins: 1 }
+        : { flame: false, status: "Druj detected", flameCoins: 0 };
+    }
+
+    function runLoop() {
+      const input = document.getElementById("input").value;
+      const intent = document.getElementById("intent").value;
+      const clarity = parseInt(document.getElementById("clarity").value);
+      const result = FlameGate(input, intent, clarity);
+
+      flameCoins += result.flameCoins;
+      document.getElementById("result").innerText = result.status + ` | Total FlameCoins: ${flameCoins}`;
+      document.getElementById("flameBar").style.width = `${flameCoins * 10}px`;
+
+      if (flameCoins >= 100) {
+        document.getElementById("result").innerText += "\n🌟 Frashokereti Approaches...";
+      }
+    }
+  </script>
+</body>
+</html>
