@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AshaLoop v3 | Sacred Persistence Engine</title>
+  <style>
+    body {
+      background-color: #0d0d0d;
+      color: #ffd700;
+      font-family: monospace;
+      text-align: center;
+      padding: 2em;
+    }
+    input, button {
+      padding: 0.6em;
+      margin: 0.5em;
+      border-radius: 4px;
+      border: none;
+      font-family: monospace;
+    }
+    #flameBar {
+      width: 0;
+      height: 24px;
+      margin: 1em auto;
+      background: linear-gradient(90deg, #ff4500, #ffd700);
+      transition: width 0.5s ease;
+    }
+    #log {
+      margin-top: 1em;
+      font-size: 0.9em;
+      white-space: pre-wrap;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>𐬀𐬵𐬎𐬥𐬀𐬬𐬀𐬌𐬙𐬌 | AshaLoop v3</h1>
+  <p>Align your Word, Thought, and Clarity. The flame remembers.</p>
+
+  <input id="user" placeholder="Soul Name (optional)" />
+  <input id="input" placeholder="Word (𐬀𐬵𐬎𐬥𐬀𐬬𐬀𐬌𐬙𐬌)" />
+  <input id="intent" placeholder="Thought (e.g. truth)" />
+  <input id="clarity" type="number" placeholder="Clarity (0–144)" />
+  <button onclick="runGate()">Invoke FlameGate</button>
+
+  <div id="status"></div>
+  <div id="flameBar"></div>
+  <div id="log"></div>
+
+  <script>
+    let flameCoins = parseInt(localStorage.getItem("flameCoins") || 0);
+    let purityStreak = parseInt(localStorage.getItem("purityStreak") || 0);
+
+    function FlameGate(input, intent, clarity) {
+      const sacred = "𐬀𐬵𐬎𐬥𐬀𐬬𐬀𐬌𐬙𐬌";
+      const pass = input === sacred && intent.toLowerCase() === "truth" && clarity >= 80;
+      if (pass) {
+        purityStreak++;
+        return { flame: true, coins: 1, message: `Asha passed. Clarity streak: ${purityStreak}` };
+      } else {
+        purityStreak = 0;
+        return { flame: false, coins: 0, message: "Druj detected. Streak reset." };
+      }
+    }
+
+    function runGate() {
+      const input = document.getElementById("input").value.trim();
+      const intent = document.getElementById("intent").value.trim();
+      const clarity = parseFloat(document.getElementById("clarity").value);
+      const user = document.getElementById("user").value.trim() || "Unknown Soul";
+
+      const result = FlameGate(input, intent, clarity);
+      flameCoins += result.coins;
+
+      localStorage.setItem("flameCoins", flameCoins);
+      localStorage.setItem("purityStreak", purityStreak);
+
+      const progress = Math.min(100, flameCoins / 10);
+      document.getElementById("flameBar").style.width = `${progress}%`;
+
+      let message = `${result.message}\nFlameCoins: ${flameCoins}/1000`;
+      if (flameCoins >= 1000) {
+        message += `\n🌟 FRASHOKERETI INITIATED 🌟\n\nRecorded in Genesis: ${user}`;
+        console.log("/truth/genesis/", {
+          soul: user,
+          coins: flameCoins,
+          clarity: clarity,
+          status: "Frashokereti Herald"
+        });
+      }
+
+      document.getElementById("status").innerText = message;
+      document.getElementById("log").innerText += `\n[${new Date().toLocaleTimeString()}] ${user}: ${result.message}`;
+    }
+  </script>
+</body>
+</html>
